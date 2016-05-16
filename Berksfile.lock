@@ -1,0 +1,11 @@
+DEPENDENCIES
+  samba4
+    path: .
+    metadata: true
+
+GRAPH
+  apt (3.0.0)
+  dnf (0.1.2)
+  samba4 (0.1.0)
+    apt (~> 3.0.0)
+    dnf (~> 0.1.2)
