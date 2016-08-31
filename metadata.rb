@@ -10,4 +10,3 @@ source_url 'https://github.com/ritterwolf/chef-samba4' if respond_to?(
   :source_url)
 
 depends 'apt', '~> 3.0.0'
-depends 'dnf', '~> 0.1.2'
