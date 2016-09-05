@@ -1,0 +1,15 @@
+# File created by Chef.
+# Do not modify, your changes will be replaced at the next converge.
+
+[global]
+<%- @globals.each do |k,v| %>
+  <%= k.gsub('_', ' ') %> = <%= v %>
+<%- end %>
+
+<%- @shares.each do |share,config| %>
+[<%= share %>]
+  <%- config.each do |k,v| %>
+  <%= k.gsub('_', ' ') %> = <%= v %>
+  <%- end %>
+
+<%- end %>

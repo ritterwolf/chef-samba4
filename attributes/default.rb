@@ -12,12 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package 'samba'
-
-template '/etc/samba/smb.conf' do
-  source 'smb.conf.erb'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  variables globals: node['samba4']['globals'], shares: node['samba4']['shares']
-end
+node.default['samba4']['globals']['workgroup'] = 'WORKGROUP'
+node.default['samba4']['shares'] = {}
+node.default['samba4']['winbind']['configure'] = false
+node.default['samba4']['winbind']['join_user'] = 'Administrator'

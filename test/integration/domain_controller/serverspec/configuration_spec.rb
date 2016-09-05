@@ -12,12 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package 'samba'
+require 'serverspec'
 
-template '/etc/samba/smb.conf' do
-  source 'smb.conf.erb'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  variables globals: node['samba4']['globals'], shares: node['samba4']['shares']
+set :backend, :exec
+
+describe file '/etc/samba/smb.conf' do
+  its(:content) { should match(/server role = dc/) }
+  its(:content) { should match(/workgroup = KITCHEN/) }
+  its(:content) { should match(/realm = KITCHEN.TEST/) }
+  its(:content) { should match %r{path = /var/lib/samba/sysvol/kitchen.test/scripts} } # rubocop:disable Metrics/LineLength
+  its(:content) { should match %r{path = /var/lib/samba/sysvol$} }
 end

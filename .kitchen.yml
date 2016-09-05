@@ -16,3 +16,8 @@ suites:
     run_list:
       - samba4::default
     attributes:
+  - name: domain_controller
+    run_list:
+      - samba4::domain_controller
+    attributes:
+      domain: kitchen.test

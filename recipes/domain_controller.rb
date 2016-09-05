@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package 'samba'
+include_recipe 'samba4::domain_variables'
 
-template '/etc/samba/smb.conf' do
-  source 'smb.conf.erb'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  variables globals: node['samba4']['globals'], shares: node['samba4']['shares']
-end
+node.default['samba4']['globals']['server_role'] = 'dc'
+
+node.default['samba4']['shares']['sysvol']['path'] = '/var/lib/samba/sysvol'
+node.default['samba4']['shares']['netlogon']['path'] =
+  "#{node['samba4']['shares']['sysvol']['path']}/#{node['samba4']['globals']['realm'].downcase}/scripts" # rubocop:disable Metric/LineLength
+
+include_recipe 'samba4::default'

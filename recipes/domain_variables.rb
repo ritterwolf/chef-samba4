@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package 'samba'
+# Here we define the variables required to create or join an Active Directory
+# domain.
 
-template '/etc/samba/smb.conf' do
-  source 'smb.conf.erb'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  variables globals: node['samba4']['globals'], shares: node['samba4']['shares']
+unless node.domain.nil?
+  node.default['samba4']['globals']['realm'] = node['domain'].upcase
+  node.default['samba4']['globals']['workgroup'] =
+    node['samba4']['globals']['realm'].split('.')[0]
 end
