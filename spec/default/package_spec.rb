@@ -24,17 +24,6 @@ describe 'samba4::default' do
     end
   end
 
-  context 'on Fedora 23' do
-    let(:chef_run) do
-      ChefSpec::SoloRunner.new(
-        platform: 'fedora', version: '23').converge(described_recipe)
-    end
-
-    it 'installs samba' do
-      expect(chef_run).to install_package('samba')
-    end
-  end
-
   context 'on Ubuntu 14.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
