@@ -4,6 +4,8 @@ driver:
 
 provisioner:
   name: chef_solo
+  data_bags_path: zero/data_bags
+  encrypted_data_bag_secret_key_path: zero/databag_secret
 
 platforms:
   - name: bento/centos-7.1
@@ -17,7 +19,9 @@ suites:
       - samba4::default
     attributes:
   - name: domain_controller
+    # Centos lacks samba-tool, required for provisioning
+    excludes: [ 'bento/centos-7.1' ]
+    driver:
+      vm_hostname: dc.kitchen.test
     run_list:
       - samba4::domain_controller
-    attributes:
-      domain: kitchen.test

@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Here we define the variables required to create or join an Active Directory
-# domain.
+# rubocop:disable Metrics/LineLength
 
-unless node['domain'].nil?
-  node.default['samba4']['globals']['realm'] = node['domain'].upcase
-  node.default['samba4']['globals']['workgroup'] =
-    node['samba4']['globals']['realm'].split('.')[0]
+admin_pass_item = Chef::EncryptedDataBagItem.load('samba4', 'Administrator')
+admin_pass = admin_pass_item['password']
+
+execute 'create-domain' do
+  command "/usr/bin/samba-tool domain provision --use-rfc2307 --adminpass #{admin_pass} --realm #{node['samba4']['globals']['realm']} --domain #{node['samba4']['globals']['workgroup']}"
+  creates '/var/lib/samba/private/krb5.conf'
 end

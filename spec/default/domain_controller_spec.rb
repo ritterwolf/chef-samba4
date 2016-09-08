@@ -15,25 +15,45 @@
 describe 'samba4::domain_controller' do
   context 'on Centos 7.1' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(
-        platform: 'centos', version: '7.1.1503').converge(described_recipe)
+      ChefSpec::ServerRunner.new(
+        platform: 'centos', version: '7.1.1503') do |node|
+          node.automatic['domain'] = 'chefspec.test'
+        end.converge(described_recipe)
+    end
+
+    before do
+      allow(Chef::EncryptedDataBagItem).to receive(:load)
+        .with('samba4', 'Administrator')
+        .and_return('password' => 'Administr8')
     end
 
     it 'configures samba' do
       expect(chef_run).to create_template('/etc/samba/smb.conf')
       expect(chef_run).to include_recipe('samba4::domain_variables')
+      expect(chef_run).to run_execute('create-domain')
+        .with(command: '/usr/bin/samba-tool domain provision --use-rfc2307 --adminpass Administr8 --realm CHEFSPEC.TEST --domain CHEFSPEC') # rubocop:disable Metrics/LineLength
     end
   end
 
   context 'on Ubuntu 14.04' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(
-        platform: 'ubuntu', version: '14.04').converge(described_recipe)
+      ChefSpec::ServerRunner.new(
+        platform: 'ubuntu', version: '14.04') do |node|
+          node.automatic['domain'] = 'chefspec.test'
+        end.converge(described_recipe)
+    end
+
+    before do
+      allow(Chef::EncryptedDataBagItem).to receive(:load)
+        .with('samba4', 'Administrator')
+        .and_return('password' => 'Administr8')
     end
 
     it 'configures samba' do
       expect(chef_run).to create_template('/etc/samba/smb.conf')
       expect(chef_run).to include_recipe('samba4::domain_variables')
+      expect(chef_run).to run_execute('create-domain')
+        .with(command: '/usr/bin/samba-tool domain provision --use-rfc2307 --adminpass Administr8 --realm CHEFSPEC.TEST --domain CHEFSPEC') # rubocop:disable Metrics/LineLength
     end
   end
 end

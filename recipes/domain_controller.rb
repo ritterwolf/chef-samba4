@@ -18,6 +18,9 @@ node.default['samba4']['globals']['server_role'] = 'dc'
 
 node.default['samba4']['shares']['sysvol']['path'] = '/var/lib/samba/sysvol'
 node.default['samba4']['shares']['netlogon']['path'] =
-  "#{node['samba4']['shares']['sysvol']['path']}/#{node['samba4']['globals']['realm'].downcase}/scripts" # rubocop:disable Metric/LineLength
+  "#{node['samba4']['shares']['sysvol']['path']}/#{node['samba4']['globals']['realm'].downcase}/scripts" # rubocop:disable Metrics/LineLength
 
 include_recipe 'samba4::default'
+
+# TODO: search DNS for our domain, and join it if it exists.
+include_recipe 'samba4::domain_provision'

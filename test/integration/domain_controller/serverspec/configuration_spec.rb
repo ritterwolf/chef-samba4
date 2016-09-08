@@ -23,3 +23,8 @@ describe file '/etc/samba/smb.conf' do
   its(:content) { should match %r{path = /var/lib/samba/sysvol/kitchen.test/scripts} } # rubocop:disable Metrics/LineLength
   its(:content) { should match %r{path = /var/lib/samba/sysvol$} }
 end
+
+describe file '/var/lib/samba/private/krb5.conf' do
+  it { should exist }
+  it { should be_file }
+end
