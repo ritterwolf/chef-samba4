@@ -55,5 +55,10 @@ describe 'samba4::domain_controller' do
       expect(chef_run).to run_execute('create-domain')
         .with(command: '/usr/bin/samba-tool domain provision --use-rfc2307 --adminpass Administr8 --realm CHEFSPEC.TEST --domain CHEFSPEC') # rubocop:disable Metrics/LineLength
     end
+
+    it 'starts the domain controller' do
+      expect(chef_run).to enable_service('samba-ad-dc')
+      expect(chef_run).to start_service('samba-ad-dc')
+    end
   end
 end

@@ -24,3 +24,7 @@ include_recipe 'samba4::default'
 
 # TODO: search DNS for our domain, and join it if it exists.
 include_recipe 'samba4::domain_provision'
+
+service 'samba-ad-dc' do
+  action [:enable, :start]
+end
